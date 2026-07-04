@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="AgriManager: a multi-simulator LLM-RL framework and benchmark for agricultural management."
+    />
+    <title>AgriManager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="AgriManager home">
+        <span class="brand-mark">AM</span>
+        <span>AgriManager</span>
+      </a>
+      <nav class="topnav" aria-label="Primary navigation">
+        <a href="https://arxiv.org/" target="_blank" rel="noreferrer">Paper</a>
+        <a href="https://github.com/agrimanager875-ux/agrimanager-code" target="_blank" rel="noreferrer">Code</a>
+        <div class="dropdown">
+          <button class="dropdown-button" type="button" aria-expanded="false" aria-controls="dataset-menu">
+            Datasets
+          </button>
+          <div class="dropdown-menu" id="dataset-menu">
+            <a href="https://huggingface.co/collections/agrimanager/agrimanager-datasets" target="_blank" rel="noreferrer">Dataset collection</a>
+            <a href="https://huggingface.co/datasets/agrimanager/wofost-weather-pool" target="_blank" rel="noreferrer">WOFOST Weather Pool</a>
+            <a href="https://huggingface.co/datasets/agrimanager/wofost-weather-regime-pool" target="_blank" rel="noreferrer">Weather-Regime Pool</a>
+            <a href="https://huggingface.co/datasets/agrimanager/weather_pool_maize" target="_blank" rel="noreferrer">Maize Weather Pool</a>
+          </div>
+        </div>
+        <a href="#citation">Citation</a>
+        <a class="github-link" href="https://github.com/agrimanager875-ux/agrimanager-code" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </header>
+
+    <div class="page-shell">
+      <aside class="sidebar" aria-label="Section navigation">
+        <a class="sidebar-home" href="#home"><span>AgriManager</span></a>
+        <p class="sidebar-label">Overview</p>
+        <a href="#abstract">Abstract</a>
+        <a href="#highlights">Highlights</a>
+        <a href="#framework">Framework</a>
+        <p class="sidebar-label">Tutorial</p>
+        <a href="#installation">Installation</a>
+        <a href="#quick-start">Quick start</a>
+        <a href="#configuration">Configuration</a>
+        <p class="sidebar-label">Guides</p>
+        <a href="#tasks">Tasks</a>
+        <a href="#rl-training">RL training</a>
+        <a href="#benchmark">Benchmark</a>
+        <a href="#new-environment">Adding an environment</a>
+        <p class="sidebar-label">Reference</p>
+        <a href="#datasets">Datasets</a>
+        <a href="#citation">Citation</a>
+      </aside>
+
+      <main class="content" id="home">
+        <section class="hero">
+          <p class="eyebrow">Framework and benchmark</p>
+          <h1>AgriManager</h1>
+          <p class="subtitle">A multi-simulator LLM-RL framework for agricultural management.</p>
+          <p class="hero-copy">
+            AgriManager studies whether prompt-conditioned policies can generalize across changing
+            weather, crops, prices, observations, actions, objectives, and simulator dynamics.
+          </p>
+          <div class="hero-actions" aria-label="Project resources">
+            <a class="button primary" href="https://arxiv.org/" target="_blank" rel="noreferrer">Paper</a>
+            <a class="button" href="https://github.com/agrimanager875-ux/agrimanager-code" target="_blank" rel="noreferrer">Code</a>
+            <a class="button" href="https://huggingface.co/collections/agrimanager/agrimanager-datasets" target="_blank" rel="noreferrer">Datasets</a>
+            <a class="button" href="#citation">Citation</a>
+          </div>
+        </section>
+
+        <section id="abstract" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">What is AgriManager?</p>
+            <h2>Abstract</h2>
+          </div>
+          <p>
+            Agricultural management varies along two axes: distributional shift within a fixed task
+            interface, such as changing weather, crops, and prices, and structural shift across
+            interfaces, such as changing observations, available actions, and management objectives.
+            AgriManager is a multi-simulator LLM-RL framework and benchmark for studying both axes.
+            It unifies DSSAT, WOFOST, and Cycles through prompt-based schema specification and
+            supports joint multi-objective, multi-environment training.
+          </p>
+          <p>
+            The benchmark defines a three-tier generalization ladder: within-schema distributional
+            shift, single-axis schema shift, and compositional schema shift across simulators. Across
+            these settings, AgriManager provides an empirical testbed for evaluating when
+            prompt-conditioned policies can generalize across heterogeneous agricultural deployments.
+          </p>
+        </section>
+
+        <section id="highlights" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Highlights</p>
+            <h2>Why this benchmark?</h2>
+          </div>
+          <div class="card-grid">
+            <article class="card">
+              <h3>Schema-aware agricultural RL</h3>
+              <p>Observations, actions, and objectives are explicit in the prompt, making the policy-facing schema a benchmark variable.</p>
+            </article>
+            <article class="card">
+              <h3>Three simulator backends</h3>
+              <p>The framework connects WOFOST-Gym, CycleGym, and DSSAT-Gym through documented environment adapters.</p>
+            </article>
+            <article class="card">
+              <h3>LLM-RL and NN baselines</h3>
+              <p>Prompt-conditioned LLM policies train with GRPO through VeRL; fixed-interface NN-PPO baselines are included when valid.</p>
+            </article>
+            <article class="card">
+              <h3>Hosted WOFOST artifacts</h3>
+              <p>Public Hugging Face datasets provide fixed train/validation rows, metadata, and runtime weather-cache artifacts.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="framework" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Framework</p>
+            <h2>Prompt-conditioned control across crop simulators</h2>
+          </div>
+          <figure class="figure-card">
+            <img src="assets/main_diagram.png" alt="AgriManager framework diagram" />
+            <figcaption>
+              AgriManager accesses crop simulators through their gym wrappers. Environment adapters
+              translate native numerical state-action representations into textual prompts and
+              structured actions, and rollouts produce state, action, reward trajectories for policy
+              updates.
+            </figcaption>
+          </figure>
+          <div class="concept-strip">
+            <div>
+              <strong>Schema shift</strong>
+              <p>A schema consists of the observation fields, available actions, and management objective exposed to the policy.</p>
+            </div>
+            <div>
+              <strong>Why LLM policies?</strong>
+              <p>Prompt-conditioned policies can re-read the schema from text instead of relying on a fixed observation vector and action head.</p>
+            </div>
+            <div>
+              <strong>Multi-turn rollout</strong>
+              <p>The prompt is rebuilt at every decision step around the current schema, observation, action history, and objective.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="installation" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Tutorial</p>
+            <h2>Installation</h2>
+          </div>
+          <pre class="code-block"><code>git clone https://github.com/agrimanager875-ux/agrimanager-code.git AgriManager
+cd AgriManager
+conda create -n agrimanager python=3.12 -y
+conda activate agrimanager
+bash install.sh</code></pre>
+          <p class="note">
+            The standard installer sets up AgriManager, VeRL, WOFOST-Gym, and CycleGym. DSSAT-Gym
+            is optional and uses a separate setup path because its native runtime can take
+            substantially longer to install.
+          </p>
+        </section>
+
+        <section id="quick-start" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Tutorial</p>
+            <h2>Quick start</h2>
+          </div>
+          <pre class="code-block"><code>bash smoke_tests/wofost_gym/run_build_datasets.sh
+bash entrypoints/eval/eval.sh</code></pre>
+          <p>
+            Use the lightweight WOFOST smoke path for sanity checks. Full training and evaluation
+            commands are mapped in <a href="https://github.com/agrimanager875-ux/agrimanager-code/blob/main/experiments/README.md" target="_blank" rel="noreferrer">experiments/README.md</a>.
+          </p>
+        </section>
+
+        <section id="configuration" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Tutorial</p>
+            <h2>Configuration</h2>
+          </div>
+          <p>
+            AgriManager uses YAML/Hydra-style configuration. Dataset rows carry the full environment
+            configuration, including <code>env_name</code>, objective, action menu, prompt settings,
+            and simulator-specific runtime fields. This keeps dataset generation, training, and
+            evaluation decoupled: the same parquet split reconstructs the same environment.
+          </p>
+          <p>
+            Most users can run the standard installer without custom environment variables. Optional
+            overrides are available for existing WOFOST-Gym, CycleGym, DSSAT-Gym, and hosted
+            model-provider paths or credentials.
+          </p>
+        </section>
+
+        <section id="tasks" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Guides</p>
+            <h2>Tasks</h2>
+          </div>
+          <div class="two-column">
+            <article class="card">
+              <h3>Crop-growth tasks</h3>
+              <p>Every few simulated days, the agent decides whether to fertilize or irrigate. The simulator advances soil and crop state until the next decision. The default objective is profit over a single growing season.</p>
+            </article>
+            <article class="card">
+              <h3>Crop-planning tasks</h3>
+              <p>At the start of each simulated year, the agent chooses the crop and planting week. The simulator runs the annual cycle, including off-season soil dynamics, and the objective is gross revenue over a multi-year rotation.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="rl-training" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Guides</p>
+            <h2>RL training</h2>
+          </div>
+          <p>
+            AgriManager trains prompt-conditioned LLM policies with GRPO through VeRL. Each rollout
+            is multi-turn: the policy reads the schema and current observation, emits a structured
+            action, receives the next observation and reward, and the prompt is rebuilt for the next
+            decision step.
+          </p>
+          <p>
+            The benchmark evaluates <strong>think</strong> and <strong>no-think</strong> response
+            contracts. The think variant emits a short reasoning trace before the final action; the
+            no-think variant emits only the action. Fixed-interface NN-PPO baselines use native numeric
+            observations and are only applicable when observation and action schemas remain compatible.
+          </p>
+        </section>
+
+        <section id="benchmark" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Guides</p>
+            <h2>Benchmark</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tier</th>
+                  <th>Setting</th>
+                  <th>Varies</th>
+                  <th>Test</th>
+                  <th>Artifact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>T1.1</td><td>Weather-regime shift</td><td>Weather context</td><td>ID, drought, wet, hot, cold</td><td>WOFOST dataset</td></tr>
+                <tr><td>T1.2</td><td>Cross-crop trait shift</td><td>Crop context and traits</td><td>Held-out crops</td><td>WOFOST dataset</td></tr>
+                <tr><td>T1.3</td><td>Price-regime shift</td><td>Crop prices</td><td>ID, high-corn, high-soybean</td><td>CycleGym generator</td></tr>
+                <tr><td>T2.1</td><td>Observation-schema shift</td><td>Observation schema</td><td>Missing, renamed, extended, anonymized schemas</td><td>WOFOST dataset</td></tr>
+                <tr><td>T2.2</td><td>Action-menu shift</td><td>Action schema</td><td>Held-out N/P/K/water menus</td><td>WOFOST dataset</td></tr>
+                <tr><td>T2.3</td><td>Reward-formulation shift</td><td>Reward schema</td><td>Yield, profit, water, nutrient stewardship</td><td>WOFOST dataset</td></tr>
+                <tr><td>T3.1</td><td>Cross-simulator transfer</td><td>Simulator schema and dynamics</td><td>3 x 3 source-target pairs</td><td>All adapters</td></tr>
+                <tr><td>T3.2</td><td>Unified policy</td><td>Simulator, action, reward tuple</td><td>Held-out schema combinations</td><td>Datasets + adapters</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="result-grid">
+            <article>
+              <h3>Tier 1</h3>
+              <p>Within fixed schemas, prompt-conditioned LLM-RL with explicit reasoning matches or exceeds fixed-interface NN-RL across weather, crop-trait, and price shifts.</p>
+            </article>
+            <article>
+              <h3>Tier 2</h3>
+              <p>Single-axis schema shift exposes distinct burdens: information sufficiency, joint action coverage, and objective coverage.</p>
+            </article>
+            <article>
+              <h3>Tier 3</h3>
+              <p>A unified prompt-conditioned policy can recombine held-out simulator, action, and objective tuples when training provides marginal coverage.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="datasets" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Reference</p>
+            <h2>Datasets</h2>
+          </div>
+          <p>
+            The hosted tabular artifacts are WOFOST-based. CycleGym and DSSAT-Gym experiments are
+            reproduced through executable simulator adapters and scenario-generation scripts rather
+            than separate hosted static datasets.
+          </p>
+          <div class="dataset-grid">
+            <a class="dataset-card featured" href="https://huggingface.co/collections/agrimanager/agrimanager-datasets" target="_blank" rel="noreferrer">
+              <span>Collection</span>
+              <strong>AgriManager datasets</strong>
+              <p>All public Hugging Face dataset artifacts in one collection.</p>
+            </a>
+            <a class="dataset-card" href="https://huggingface.co/datasets/agrimanager/wofost-weather-pool" target="_blank" rel="noreferrer">
+              <span>WOFOST</span>
+              <strong>Weather Pool</strong>
+              <p>20-crop weather scenario pool for cross-crop trait shift and WOFOST crop-support runs.</p>
+            </a>
+            <a class="dataset-card" href="https://huggingface.co/datasets/agrimanager/wofost-weather-regime-pool" target="_blank" rel="noreferrer">
+              <span>WOFOST</span>
+              <strong>Weather-Regime Pool</strong>
+              <p>Chickpea and potato scenarios across ID, drought, wet, hot, and cold weather regimes.</p>
+            </a>
+            <a class="dataset-card" href="https://huggingface.co/datasets/agrimanager/weather_pool_maize" target="_blank" rel="noreferrer">
+              <span>WOFOST</span>
+              <strong>Maize Weather Pool</strong>
+              <p>Maize-only pool for observation, action, reward, and cross-simulator experiments.</p>
+            </a>
+          </div>
+        </section>
+
+        <section id="new-environment" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Guides</p>
+            <h2>Adding a new environment</h2>
+          </div>
+          <p>
+            A new simulator integrates by adding an environment package under
+            <code>agrimanager/env/&lt;name&gt;/</code> that implements the dataset generator, LLM
+            environment, configuration object, prompt/action parser, and optional NN adapter.
+          </p>
+          <pre class="code-block"><code>env.py
+env_config.py
+prompt.py
+create_dataset.py
+nn_adapter.py  # optional</code></pre>
+          <p>
+            See the full <a href="https://github.com/agrimanager875-ux/agrimanager-code/blob/main/docs/environment_adapter_contract.md" target="_blank" rel="noreferrer">environment adapter contract</a>.
+          </p>
+        </section>
+
+        <section id="citation" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Reference</p>
+            <h2>Citation</h2>
+          </div>
+          <p>If you use AgriManager, please cite the project. This BibTeX will be updated after paper release.</p>
+          <pre class="code-block bibtex"><code id="bibtex">@misc{agrimanager2026,
+  title = {AgriManager},
+  author = {Anonymous Authors},
+  year = {2026},
+  note = {Citation information will be updated after paper release.}
+}</code></pre>
+          <button class="copy-button" type="button" data-copy-target="bibtex">Copy BibTeX</button>
+          <details class="references">
+            <summary>References and source stack</summary>
+            <ol>
+              <li>Michael Ahn et al. Do as I can, not as I say: Grounding language in robotic affordances. CoRL, 2022.</li>
+              <li>Richard G. Allen, Luis S. Pereira, Dirk Raes, and Martin Smith. Crop evapotranspiration: Guidelines for computing crop water requirements. FAO Irrigation and Drainage Paper 56, 1998.</li>
+              <li>Thomas W. Bruulsema, Paul E. Fixen, and Gavin D. Sulewski, editors. 4R Plant Nutrition: A Manual for Improving the Management of Plant Nutrition. IPNI, 2012.</li>
+              <li>Dong Chen and Yanbo Huang. Integrating reinforcement learning and large language models for crop production process management optimization and control. arXiv:2410.09680, 2024.</li>
+              <li>Karl Cobbe et al. Leveraging procedural generation to benchmark reinforcement learning. ICML, 2020.</li>
+              <li>David W. Franzen. North Dakota Fertilizer Recommendation Tables and Equations. NDSU Extension SF-882, 2010.</li>
+              <li>Romain Gautron et al. gym-DSSAT: a crop model turned into a reinforcement learning environment. arXiv:2207.03270, 2022.</li>
+              <li>James W. Jones et al. Brief history of agricultural systems modeling. Agricultural Systems, 155:240-254, 2017.</li>
+              <li>Robert Kirk et al. A survey of zero-shot generalisation in deep reinforcement learning. JAIR, 76:201-264, 2023.</li>
+              <li>Chang Ma et al. AgentBoard: An analytical evaluation board of multi-turn LLM agents. NeurIPS Datasets and Benchmarks, 2024.</li>
+              <li>Hiske Overweg, Herman N. C. Berghuijs, and Ioannis N. Athanasiadis. CropGym: a reinforcement learning environment for crop management. arXiv:2104.04326, 2021.</li>
+              <li>Antonin Raffin et al. Stable-baselines3: Reliable reinforcement learning implementations. JMLR, 22(268):1-8, 2021.</li>
+              <li>Zhihong Shao et al. DeepSeekMath: Pushing the limits of mathematical reasoning in open language models. arXiv:2402.03300, 2024.</li>
+              <li>Guangming Sheng et al. HybridFlow: A flexible and efficient RLHF framework. arXiv:2409.19256, 2024. Open-sourced as VeRL.</li>
+              <li>William Solow, Sandhya Saisubramanian, and Alan Fern. WOFOSTGym: A crop simulator for learning annual and perennial crop management strategies. Reinforcement Learning Journal, 6:671-689, 2025.</li>
+              <li>Yanchao Sun et al. Transfer RL across observation feature spaces via model-based regularization. ICLR, 2022.</li>
+              <li>Andrew Szot et al. Large language models as generalizable policies for embodied tasks. ICLR, 2024.</li>
+              <li>Matteo Turchetta et al. Learning long-term crop management strategies with CyclesGym. NeurIPS Datasets and Benchmarks, 2022.</li>
+              <li>Thomas van Klompenburg, Ayalew Kassahun, and Cagatay Catal. Crop yield prediction using machine learning: A systematic literature review. Computers and Electronics in Agriculture, 177:105709, 2020.</li>
+              <li>Jing Wu et al. The new agronomists: Language models are experts in crop management. CVPR Workshops, 2024.</li>
+              <li>An Yang et al. Qwen3 technical report. arXiv:2505.09388, 2025.</li>
+              <li>Shunyu Yao et al. ReAct: Synergizing reasoning and acting in language models. ICLR, 2023.</li>
+              <li>Wenshuai Zhao et al. Sim-to-real transfer in deep reinforcement learning for robotics: a survey. IEEE SSCI, 2020.</li>
+              <li>Shuyan Zhou et al. WebArena: A realistic web environment for building autonomous agents. ICLR, 2024.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="responsible-use" class="section caution">
+          <div class="section-heading">
+            <p class="eyebrow">Limitations</p>
+            <h2>Responsible use</h2>
+          </div>
+          <p>
+            AgriManager is evaluated in simulation. DSSAT, WOFOST, and Cycles are mechanistic crop
+            simulators and do not capture every real-world deployment factor, such as sensor noise,
+            actuator latency, farmer-in-the-loop delays, or local agronomic constraints. The benchmark
+            is intended for research evaluation, not direct farm-management recommendation.
+          </p>
+        </section>
+      </main>
+
+      <aside class="toc" aria-label="On this page">
+        <p>On this page</p>
+        <a href="#abstract">Abstract</a>
+        <a href="#highlights">Highlights</a>
+        <a href="#framework">Framework</a>
+        <a href="#installation">Installation</a>
+        <a href="#benchmark">Benchmark</a>
+        <a href="#datasets">Datasets</a>
+        <a href="#citation">Citation</a>
+      </aside>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
