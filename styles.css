@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=Source+Sans+3:wght@400;500;600;700;800&display=swap");
 
 :root {
-  --bg: #fbf8ef;
-  --bg-deep: #eef3e5;
-  --panel: #fffdf8;
+  --bg: #faf9f5;
+  --bg-deep: #f2f4ee;
+  --panel: #fffdf9;
   --panel-strong: #ffffff;
   --ink: #172019;
   --muted: #637064;
@@ -14,8 +14,8 @@
   --sage: #8fa78e;
   --field: #e9b85f;
   --clay: #b76633;
-  --shadow: 0 28px 90px rgba(34, 54, 37, 0.12);
-  --radius: 28px;
+  --shadow: 0 12px 36px rgba(34, 54, 37, 0.08);
+  --radius: 18px;
   --display: "Fraunces", Georgia, serif;
   --sans: "Source Sans 3", "Avenir Next", "Helvetica Neue", sans-serif;
   --mono: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
@@ -32,13 +32,10 @@ html {
 body {
   margin: 0;
   color: var(--ink);
-  background:
-    radial-gradient(circle at 7% 4%, rgba(233, 184, 95, 0.38), transparent 26rem),
-    radial-gradient(circle at 95% 12%, rgba(47, 125, 71, 0.16), transparent 28rem),
-    linear-gradient(180deg, #fffdf8 0%, var(--bg) 45%, var(--bg-deep) 100%);
+  background: linear-gradient(180deg, #fffdf9 0%, var(--bg) 50%, var(--bg-deep) 100%);
   font-family: var(--sans);
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.62;
 }
 
 a {
@@ -58,7 +55,7 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 74px;
+  min-height: 64px;
   padding: 0 4vw;
   border-bottom: 1px solid rgba(223, 230, 217, 0.8);
   background: rgba(255, 253, 248, 0.84);
@@ -75,15 +72,15 @@ p {
 
 .brand-mark {
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   place-items: center;
-  border-radius: 15px;
+  border-radius: 10px;
   color: #fff;
-  background: linear-gradient(135deg, var(--green), #82a947);
-  box-shadow: 0 12px 34px rgba(47, 125, 71, 0.25);
+  background: var(--green);
+  box-shadow: none;
   font-family: var(--display);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
 }
 
 .site-nav {
@@ -99,8 +96,8 @@ p {
   border: 1px solid transparent;
   border-radius: 999px;
   font: inherit;
-  font-size: 0.98rem;
-  font-weight: 800;
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .site-nav a {
@@ -127,25 +124,23 @@ main {
 }
 
 .section-shell {
-  margin-top: 1.2rem;
+  margin-top: 1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(255, 253, 248, 0.78);
-  box-shadow: 0 16px 60px rgba(34, 54, 37, 0.06);
+  background: rgba(255, 253, 249, 0.88);
+  box-shadow: 0 8px 28px rgba(34, 54, 37, 0.045);
 }
 
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(310px, 0.65fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
+  gap: clamp(1.25rem, 3vw, 3rem);
   align-items: center;
-  min-height: calc(100vh - 110px);
+  min-height: auto;
   margin-top: 1rem;
-  padding: clamp(2rem, 5vw, 5rem);
+  padding: clamp(2rem, 4vw, 3.4rem);
   overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(233, 184, 95, 0.22), transparent 40%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(246, 251, 241, 0.92));
+  background: var(--panel-strong);
 }
 
 .hero-copy {
@@ -156,9 +151,9 @@ main {
 .card-kicker,
 .artifact-card span {
   color: var(--green-dark);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -166,8 +161,8 @@ h1,
 h2,
 h3 {
   margin: 0;
-  line-height: 1.03;
-  letter-spacing: -0.038em;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
 }
 
 h1,
@@ -176,38 +171,38 @@ h2 {
 }
 
 h1 {
-  margin-top: 0.35rem;
-  font-size: clamp(4.8rem, 12vw, 9.4rem);
+  margin-top: 0.28rem;
+  font-size: clamp(3rem, 6.5vw, 5.2rem);
 }
 
 h2 {
-  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  font-size: clamp(1.85rem, 3.6vw, 3rem);
 }
 
 h3 {
-  font-size: 1.35rem;
+  font-size: 1.18rem;
 }
 
 .subtitle {
-  margin-top: 0.65rem;
+  margin-top: 0.5rem;
   color: var(--ink);
-  font-size: clamp(1.35rem, 2.7vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1.18;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 650;
+  line-height: 1.28;
 }
 
 .lead {
   max-width: 720px;
-  margin-top: 1.35rem;
+  margin-top: 1rem;
   color: var(--muted);
-  font-size: 1.24rem;
+  font-size: 1.06rem;
 }
 
 .resource-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  margin-top: 1.75rem;
+  margin-top: 1.35rem;
 }
 
 .button,
@@ -215,8 +210,8 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 1.1rem;
+  min-height: 40px;
+  padding: 0 0.95rem;
   color: var(--ink);
   background: var(--panel-strong);
   border-color: var(--line);
@@ -233,7 +228,7 @@ h3 {
 .button:hover,
 .copy-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 32px rgba(34, 54, 37, 0.12);
+  box-shadow: 0 8px 22px rgba(34, 54, 37, 0.09);
 }
 
 .button.primary:hover {
@@ -254,39 +249,39 @@ h3 {
 .citation-box,
 .source-stack {
   border: 1px solid var(--line);
-  border-radius: 22px;
+  border-radius: 16px;
   background: var(--panel-strong);
 }
 
 .schema-card {
-  padding: 1.25rem;
-  box-shadow: var(--shadow);
+  padding: 1rem;
+  box-shadow: none;
 }
 
 .schema-label {
   display: inline-flex;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.65rem;
   color: var(--clay);
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .schema-row {
   display: grid;
   gap: 0.2rem;
-  padding: 0.85rem 0;
+  padding: 0.7rem 0;
   border-top: 1px solid var(--line);
 }
 
 .schema-row span {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .schema-row strong {
-  font-size: 1.04rem;
+  font-size: 0.98rem;
 }
 
 .hero-stats {
@@ -296,7 +291,7 @@ h3 {
 }
 
 .hero-stats div {
-  padding: 1rem;
+  padding: 0.85rem;
   border-right: 1px solid var(--line);
 }
 
@@ -308,7 +303,7 @@ h3 {
   display: block;
   color: var(--green-dark);
   font-family: var(--display);
-  font-size: 2.1rem;
+  font-size: 1.65rem;
   line-height: 1;
 }
 
@@ -316,7 +311,7 @@ h3 {
   display: block;
   margin-top: 0.35rem;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.84rem;
   line-height: 1.25;
 }
 
@@ -324,15 +319,15 @@ h3 {
 .docs-strip {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  padding: clamp(1.6rem, 4vw, 3.2rem);
+  gap: clamp(1.25rem, 3vw, 3rem);
+  padding: clamp(1.35rem, 3vw, 2.4rem);
 }
 
 .intro-copy {
   display: grid;
   gap: 1rem;
   color: var(--muted);
-  font-size: 1.12rem;
+  font-size: 1rem;
 }
 
 .split-cards,
@@ -341,8 +336,8 @@ h3 {
 .artifact-grid,
 .pipeline {
   display: grid;
-  gap: 1rem;
-  padding: clamp(1rem, 2.5vw, 1.4rem);
+  gap: 0.85rem;
+  padding: clamp(0.9rem, 2vw, 1.2rem);
 }
 
 .split-cards {
@@ -353,7 +348,7 @@ h3 {
 .tier-card,
 .finding-card,
 .artifact-card {
-  padding: 1.15rem;
+  padding: 1rem;
 }
 
 .info-card p,
@@ -376,7 +371,7 @@ h3 {
 }
 
 .section-heading {
-  padding: clamp(1.6rem, 4vw, 3rem) clamp(1.6rem, 4vw, 3rem) 0;
+  padding: clamp(1.35rem, 3vw, 2.35rem) clamp(1.35rem, 3vw, 2.35rem) 0;
 }
 
 .section-heading.compact {
@@ -384,15 +379,15 @@ h3 {
 }
 
 .section-heading p {
-  margin-top: 0.8rem;
-  font-size: 1.1rem;
+  margin-top: 0.65rem;
+  font-size: 1rem;
 }
 
 .framework-figure {
-  margin: clamp(1rem, 2.5vw, 1.5rem);
-  padding: clamp(0.7rem, 2vw, 1.1rem);
+  margin: clamp(0.9rem, 2vw, 1.2rem);
+  padding: clamp(0.65rem, 1.5vw, 0.9rem);
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 16px;
   background: #fff;
 }
 
@@ -400,13 +395,13 @@ h3 {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 18px;
+  border-radius: 12px;
 }
 
 .framework-figure figcaption {
   margin: 0.9rem 0.2rem 0;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .pipeline {
@@ -415,8 +410,8 @@ h3 {
 }
 
 .pipeline div {
-  padding: 1rem;
-  border-radius: 18px;
+  padding: 0.9rem;
+  border-radius: 14px;
   background: rgba(232, 239, 226, 0.75);
 }
 
@@ -424,9 +419,9 @@ h3 {
 .finding-card span,
 .tier-number {
   display: inline-grid;
-  width: 38px;
-  height: 38px;
-  margin-bottom: 0.8rem;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0.65rem;
   place-items: center;
   border-radius: 999px;
   color: #fff;
@@ -437,13 +432,13 @@ h3 {
 
 .pipeline strong {
   display: block;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .pipeline p {
-  margin-top: 0.45rem;
+  margin-top: 0.4rem;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: 0.92rem;
 }
 
 .tier-grid {
@@ -455,7 +450,7 @@ h3 {
 }
 
 .tier-card ul {
-  margin: 1rem 0 0;
+  margin: 0.85rem 0 0;
   padding-left: 1.05rem;
   color: var(--muted);
 }
@@ -469,13 +464,12 @@ h3 {
 }
 
 .finding-card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 251, 243, 0.96));
+  background: var(--panel-strong);
 }
 
 .finding-card p {
-  margin-top: 0.7rem;
-  font-size: 1rem;
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
 }
 
 .artifact-grid {
@@ -485,7 +479,7 @@ h3 {
 .artifact-card {
   grid-column: span 2;
   color: var(--ink);
-  min-height: 170px;
+  min-height: 150px;
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
 
@@ -497,12 +491,12 @@ h3 {
 .artifact-card:hover {
   transform: translateY(-2px);
   border-color: rgba(47, 125, 71, 0.34);
-  box-shadow: 0 18px 48px rgba(34, 54, 37, 0.12);
+  box-shadow: 0 10px 28px rgba(34, 54, 37, 0.09);
 }
 
 .artifact-card p {
-  margin-top: 0.65rem;
-  font-size: 1rem;
+  margin-top: 0.55rem;
+  font-size: 0.95rem;
 }
 
 .docs-strip {
@@ -515,9 +509,9 @@ h3 {
 }
 
 .doc-links a {
-  padding: 0.85rem 1rem;
+  padding: 0.75rem 0.9rem;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 12px;
   color: var(--green-dark);
   background: var(--panel-strong);
   font-weight: 800;
@@ -536,39 +530,37 @@ h3 {
 .abstract-block p,
 .limitations p {
   max-width: 920px;
-  margin: 1rem clamp(1.6rem, 4vw, 3rem) 0;
-  font-size: 1.08rem;
+  margin: 0.8rem clamp(1.35rem, 3vw, 2.35rem) 0;
+  font-size: 1rem;
 }
 
 .limitations {
-  background:
-    linear-gradient(135deg, rgba(183, 102, 51, 0.12), transparent 42%),
-    rgba(255, 253, 248, 0.82);
+  background: rgba(255, 253, 248, 0.9);
 }
 
 .citation-box {
-  margin: 1rem clamp(1.6rem, 4vw, 3rem) 0;
+  margin: 0.9rem clamp(1.35rem, 3vw, 2.35rem) 0;
   overflow: hidden;
 }
 
 .citation-box pre {
   margin: 0;
-  padding: 1.15rem;
+  padding: 1rem;
   overflow-x: auto;
   color: #eef9ed;
   background: #152119;
   font-family: var(--mono);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.55;
 }
 
 .copy-button {
-  margin: 1rem 1.15rem 1.15rem;
+  margin: 0.85rem 1rem 1rem;
 }
 
 .source-stack {
-  margin: 1rem clamp(1.6rem, 4vw, 3rem) 0;
-  padding: 1rem 1.15rem;
+  margin: 0.9rem clamp(1.35rem, 3vw, 2.35rem) 0;
+  padding: 0.9rem 1rem;
 }
 
 .source-stack summary {
@@ -593,15 +585,15 @@ h3 {
   gap: 1rem;
   width: min(1180px, calc(100% - 2rem));
   margin: 1.2rem auto 2rem;
-  padding: 1.2rem 0.2rem;
+  padding: 0.9rem 0.2rem;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 600ms ease, transform 600ms ease;
+  transform: translateY(10px);
+  transition: opacity 420ms ease, transform 420ms ease;
 }
 
 .reveal.visible {
@@ -643,7 +635,7 @@ h3 {
 
 @media (max-width: 760px) {
   body {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .site-header {
@@ -690,15 +682,19 @@ h3 {
   .finding-grid,
   .artifact-grid,
   .docs-strip {
-    padding: 1rem;
+    padding: 0.9rem;
   }
 
   .section-shell {
-    border-radius: 20px;
+    border-radius: 16px;
   }
 
   h1 {
-    font-size: clamp(3.8rem, 17vw, 5.5rem);
+    font-size: clamp(2.7rem, 12vw, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(1.65rem, 8vw, 2.35rem);
   }
 
   .hero-stats {
