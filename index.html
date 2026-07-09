@@ -35,11 +35,12 @@
           <p class="eyebrow">Framework and benchmark</p>
           <h1>AgriManager</h1>
           <p class="subtitle">
-            A framework and benchmark for LLM-RL generalization in agricultural management.
+            A Framework and Benchmark for LLM-RL Generalization in Agricultural Management.
           </p>
           <p class="lead">
-            AgriManager studies whether prompt-conditioned policies can generalize across changing
-            weather, crops, prices, observations, actions, objectives, and simulator dynamics.
+            AgriManager asks whether prompt-conditioned LLM-RL generalizes across the
+            heterogeneity of agricultural management: distributional shift within a fixed schema and
+            structural shift across schemas.
           </p>
           <div class="resource-row" aria-label="Project resources">
             <a class="button primary" href="https://arxiv.org/" target="_blank" rel="noreferrer">Paper</a>
@@ -70,19 +71,19 @@
       <section class="section-shell intro-grid" id="overview">
         <div>
           <p class="eyebrow">Motivation</p>
-          <h2>Generalization in agriculture is not just about new weather.</h2>
+          <h2>Agricultural RL faces distributional and structural shift.</h2>
         </div>
         <div class="intro-copy">
           <p>
-            Agricultural policies face two forms of heterogeneity. The first is distributional:
-            weather, crops, prices, years, and locations change while the interface stays fixed. The
-            second is structural: farms and simulators may expose different observations, action
-            menus, and objectives.
+            The heterogeneity an agricultural RL policy faces decomposes into two qualitatively
+            different axes. The first is distributional shift within a fixed interface: weather, soil,
+            crop variety, or prices change while the observed variables, available actions, and
+            management objective stay the same.
           </p>
           <p>
-            Fixed-interface neural policies become incompatible when the observation vector or action
-            head changes. AgriManager instead makes the policy-facing schema explicit in text, so a
-            prompt-conditioned policy can read the task interface at the start of each episode.
+            The second is structural shift across interfaces: different farms expose different
+            observed variables, support different management actions, or optimize different
+            objectives. We name this broader structural axis schema shift.
           </p>
         </div>
       </section>
@@ -92,24 +93,23 @@
           <span class="card-kicker">Axis 1</span>
           <h3>Distributional shift</h3>
           <p>
-            The schema stays fixed, but the context changes: weather regimes, crop traits, prices,
-            years, or locations.
+            The policy-facing schema is held fixed while the episode context distribution changes.
           </p>
         </article>
         <article class="info-card">
           <span class="card-kicker">Axis 2</span>
           <h3>Schema shift</h3>
           <p>
-            The policy-facing interface changes: observed variables, available actions, or reward
-            objectives differ across settings.
+            The policy-facing interface changes through the observation schema, action schema, or
+            reward schema.
           </p>
         </article>
         <article class="info-card">
           <span class="card-kicker">Policy class</span>
           <h3>Prompt-conditioned control</h3>
           <p>
-            The LLM policy receives the current schema as text and emits a structured action in the
-            same episode-specific interface.
+            Prompt-conditioned LLM policies re-read the schema from the prompt of each new
+            episode.
           </p>
         </article>
       </section>
@@ -117,31 +117,32 @@
       <section class="section-shell" id="framework">
         <div class="section-heading">
           <p class="eyebrow">Framework</p>
-          <h2>One prompt interface over multiple crop simulators.</h2>
+          <h2>A schema-aware text interface over DSSAT, WOFOST, and Cycles.</h2>
         </div>
         <figure class="framework-figure">
           <img src="assets/main_diagram.png" alt="AgriManager framework diagram" />
           <figcaption>
-            Crop simulators are accessed through their gym wrappers. AgriManager adapters translate
-            native numerical state-action representations into text prompts and structured actions,
-            while rollouts produce state, action, reward trajectories for policy updates.
+            Three crop simulators are accessed through their gym wrappers. The framework's
+            environment adapters and unified interface translate the numerical state-action
+            representation into the textual one consumed by the LLM decision model; rollouts drive
+            policy updates.
           </figcaption>
         </figure>
         <div class="pipeline">
           <div>
             <span>01</span>
-            <strong>Simulator adapters</strong>
-            <p>WOFOST-Gym, CycleGym, and DSSAT-Gym are connected through backend-specific adapters.</p>
+            <strong>Gym-wrapped simulators</strong>
+            <p>DSSAT, WOFOST, and Cycles are accessed through gym-DSSAT, WOFOST-Gym, and CycleGym.</p>
           </div>
           <div>
             <span>02</span>
-            <strong>Schema-aware prompts</strong>
-            <p>Observation fields, action menus, and objectives are declared in every episode prompt.</p>
+            <strong>Structured schema prompt</strong>
+            <p>The framework declares the policy-facing schema to the policy through a structured prompt template.</p>
           </div>
           <div>
             <span>03</span>
-            <strong>LLM-RL rollouts</strong>
-            <p>Prompt-conditioned policies are trained with GRPO via VeRL and compared against NN baselines where applicable.</p>
+            <strong>Policy updates</strong>
+            <p>Policy updates are computed by VeRL; fixed-interface neural baselines are used for controlled comparison where applicable.</p>
           </div>
         </div>
       </section>
@@ -151,15 +152,15 @@
           <p class="eyebrow">Benchmark</p>
           <h2>A three-tier generalization ladder.</h2>
           <p>
-            The benchmark separates context shift from schema shift, then recombines them across
-            simulator backends.
+            The AgriManager benchmark decomposes generalization into eight settings, with a shared
+            evaluation protocol.
           </p>
         </div>
         <div class="tier-grid">
           <article class="tier-card">
             <span class="tier-number">T1</span>
             <h3>Distributional shift</h3>
-            <p>Can a policy handle new contexts under the same observation, action, and reward schema?</p>
+            <p>Tier 1 holds the schema fixed and varies the episode context distribution.</p>
             <ul>
               <li>Weather-regime shift</li>
               <li>Cross-crop trait shift</li>
@@ -169,7 +170,7 @@
           <article class="tier-card">
             <span class="tier-number">T2</span>
             <h3>Single-axis schema shift</h3>
-            <p>What happens when one part of the policy-facing interface changes?</p>
+            <p>Tier 2 changes exactly one of the observation, action, or reward schema axes.</p>
             <ul>
               <li>Observation-schema shift</li>
               <li>Action-menu shift</li>
@@ -179,7 +180,7 @@
           <article class="tier-card">
             <span class="tier-number">T3</span>
             <h3>Compositional shift</h3>
-            <p>Can one policy compose simulator and schema coverage into held-out combinations?</p>
+            <p>Tier 3 changes multiple schema components together; T3.1 additionally changes simulator dynamics.</p>
             <ul>
               <li>Cross-simulator transfer</li>
               <li>Unified policy evaluation</li>
@@ -196,34 +197,34 @@
         <div class="finding-grid">
           <article class="finding-card">
             <span>01</span>
-            <h3>LLM-RL is competitive under fixed schemas.</h3>
+            <h3>Within fixed schemas, prompt-conditioned LLM-RL matches or exceeds NN-RL.</h3>
             <p>
-              Within fixed schemas, prompt-conditioned LLM-RL matches or exceeds fixed-interface
-              NN-RL across weather, crop-trait, and price shifts.
+              The paper reports this result on all three Tier 1 settings.
             </p>
           </article>
           <article class="finding-card">
             <span>02</span>
-            <h3>Reasoning helps under cost-sensitive rewards.</h3>
+            <h3>Reasoning becomes necessary when reward shape penalizes input use.</h3>
             <p>
-              Explicit reasoning is most useful when the reward requires balancing yield against
-              resource cost and input penalties.
+              In the reported fixed-schema settings, explicit reasoning is required when the reward
+              shape penalizes input use.
             </p>
           </article>
           <article class="finding-card">
             <span>03</span>
-            <h3>Schema axes fail differently.</h3>
+            <h3>Single-axis schema shift imposes different burdens along each axis.</h3>
             <p>
-              Observation shift stresses information sufficiency, action-menu shift stresses joint
-              action coverage, and reward shift stresses objective coverage.
+              The reported burdens are information sufficiency for observation schema, joint
+              action-menu coverage for action schema, and objective coverage for reward schema.
             </p>
           </article>
           <article class="finding-card">
             <span>04</span>
-            <h3>Unified policies work with coverage.</h3>
+            <h3>Unified prompt-conditioned control has a conditional positive result.</h3>
             <p>
-              A unified prompt-conditioned policy can match or exceed per-source specialists when
-              simulator, action, and objective components receive marginal coverage during training.
+              Under compositional schema shift, the paper reports generalization when training
+              provides marginal coverage of each schema-axis component and each simulator whose
+              dynamics it must cover.
             </p>
           </article>
         </div>
@@ -234,16 +235,16 @@
           <p class="eyebrow">Artifacts</p>
           <h2>Datasets and executable generators.</h2>
           <p>
-            The hosted tabular dataset artifacts are WOFOST-based. CycleGym and DSSAT-Gym
-            experiments are reproduced through executable simulator adapters and scenario-generation
-            scripts rather than separate hosted static datasets.
+            The hosted tabular artifacts are WOFOST-based. CycleGym and DSSAT-Gym experiments
+            are reproduced through executable simulator adapters and scenario-generation scripts
+            rather than separate hosted static datasets.
           </p>
         </div>
         <div class="artifact-grid">
           <a class="artifact-card code" href="https://github.com/agrimanager875-ux/agrimanager-code" target="_blank" rel="noreferrer">
             <span>Code</span>
             <strong>AgriManager framework</strong>
-            <p>Adapters, training/evaluation scripts, experiment configs, and reproduction docs.</p>
+            <p>Framework and benchmark code for the paper's simulator adapters, policy training, and evaluation settings.</p>
           </a>
           <a class="artifact-card collection" href="https://huggingface.co/collections/agrimanager/agrimanager-datasets" target="_blank" rel="noreferrer">
             <span>Collection</span>
@@ -253,7 +254,7 @@
           <a class="artifact-card" href="https://huggingface.co/datasets/agrimanager/wofost-weather-pool" target="_blank" rel="noreferrer">
             <span>Dataset</span>
             <strong>WOFOST Weather Pool</strong>
-            <p>20-crop WOFOST weather scenario pool for cross-crop trait and crop-support experiments.</p>
+            <p>WOFOST weather scenario pool used for cross-crop trait shift experiments.</p>
           </a>
           <a class="artifact-card" href="https://huggingface.co/datasets/agrimanager/wofost-weather-regime-pool" target="_blank" rel="noreferrer">
             <span>Dataset</span>
@@ -273,8 +274,8 @@
           <p class="eyebrow">Reproducibility</p>
           <h2>Detailed setup lives in the code repository.</h2>
           <p>
-            The public site keeps the overview concise. Installation, simulator setup, smoke tests,
-            experiment maps, and adapter details are maintained with the code artifact.
+            Installation, simulator setup, smoke tests, experiment maps, and adapter details are
+            maintained with the code artifact.
           </p>
         </div>
         <div class="doc-links">
@@ -298,10 +299,10 @@
           available actions, and management objectives.
         </p>
         <p>
-          AgriManager formalizes structural variation as schema shift and unifies DSSAT, WOFOST,
-          and Cycles under prompt-based schema specification. The benchmark introduces a three-tier
-          ladder spanning within-schema distributional shift, single-axis schema shift, and
-          compositional schema shift across simulators.
+          AgriManager formalizes the second axis as schema shift and unifies DSSAT, WOFOST, and
+          Cycles under prompt-based schema specification. On this platform, the paper designs a
+          three-tier generalization ladder: Tier 1 within-schema distributional shift, Tier 2
+          single-axis schema shift, and Tier 3 compositional schema shift across simulators.
         </p>
       </section>
 
@@ -311,10 +312,11 @@
           <h2>Simulator benchmark, not farm advice.</h2>
         </div>
         <p>
-          AgriManager is a research benchmark for evaluating policy generalization in simulation. It
-          is not a farm-deployment system or agronomic recommendation service. Results are bounded
-          by simulator assumptions, scenario-generation choices, available crop/weather regimes, and
-          the gap between simulated dynamics and real farm operations.
+          All evaluation is in simulation. DSSAT, WOFOST, and Cycles are mechanistic crop
+          simulators without real sensor noise, actuator latency, or farmer-in-the-loop delays, so
+          the paper's generalization claims hold at the simulator level only. Released policies
+          should not be used to schedule inputs or planting decisions without local agronomic review
+          and field validation.
         </p>
       </section>
 
@@ -334,13 +336,10 @@
           <button class="copy-button" type="button" data-copy-target="bibtex">Copy BibTeX</button>
         </div>
         <details class="source-stack">
-          <summary>Core source stack</summary>
+          <summary>Framework source stack cited in the paper</summary>
           <ul>
-            <li>WOFOST-Gym: crop-management simulator wrapper used by the hosted WOFOST datasets.</li>
-            <li>CycleGym and Cycles: crop-planning simulator backend for price-regime experiments.</li>
-            <li>DSSAT-Gym / DSSAT-PDI and DSSAT-CSM: optional external-runtime backend.</li>
-            <li>PCSE/WOFOST and NASA POWER: WOFOST processing and meteorological data provenance.</li>
-            <li>VeRL / HybridFlow: RL training framework used for prompt-conditioned policies.</li>
+            <li>Crop simulators are accessed through gym-DSSAT, WOFOSTGym, and CyclesGym.</li>
+            <li>RL training is built on VeRL.</li>
           </ul>
         </details>
       </section>
@@ -348,7 +347,7 @@
 
     <footer class="site-footer">
       <span>AgriManager</span>
-      <span>Framework and benchmark for agricultural LLM-RL generalization.</span>
+      <span>A Framework and Benchmark for LLM-RL Generalization in Agricultural Management.</span>
     </footer>
 
     <script src="main.js"></script>
